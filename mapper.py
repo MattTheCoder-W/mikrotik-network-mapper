@@ -87,15 +87,18 @@ class Mapper:
                     neighbor_info["hostname"] = neighbor['identity']
                 except KeyError:
                     continue
+                if "," in interface:
+                    continue
                 node_info['interfaces'][interface]['neighbors'].append(neighbor_info)
                 if neighbor['mac-address'] not in self.macs:
                     self.macs.append(neighbor['mac-address'])
             self.nodes.append(node_info)
     
-    def make_map(self, out_format: str = "png"):
+    def make_map(self, out_file: str = "png"):
+        out_format = out_file.split(".")[-1] if "." in out_file else "stdout"
         if out_format == "json":
             json_obj = json.dumps(self.nodes, indent=4)
-            with open("output.json", "w") as out:
+            with open(out_file, "w") as out:
                 out.write(json_obj)
             return
         if out_format == "txt" or out_format == "stdout":
@@ -112,7 +115,7 @@ class Mapper:
                         out.append(f"\t\tHostname: {neighbor['hostname']}")
                         out.append("\t\t" + "="*20)
             if out_format == "txt":
-                with open("output.txt", "w") as f:
+                with open(out_file, "w") as f:
                     f.writelines([line+"\n" for line in out])
             else:
                 for line in out:
@@ -158,14 +161,15 @@ class Mapper:
                     if "address" in neighbor:
                         draw.text((next_pos[0]-60+(OFFSET), next_pos[1]+90), neighbor['address'], (0, 0, 0), font=font)
                     draw.line([pos[0]+(OFFSET), pos[1], next_pos[0]+(OFFSET), next_pos[1]], (random.randint(0, 200), random.randint(0, 200), random.randint(0, 200)), width=5)
-        img.save(f"output.{out_format}")
+        img.save(out_file)
 
 
 if __name__ == "__main__":
     args = get_args()
+    out_file = "stdout" if args['output_file'] is None else args['output_file']
     mapper = Mapper(args)
     mapper.find_active()
     print(f"Found {len(mapper.active)} active mikrotik hosts!")
     mapper.find_credentials()
     mapper.find_neighbors()
-    mapper.make_map(out_format="stdout")
+    mapper.make_map(out_file=out_file)

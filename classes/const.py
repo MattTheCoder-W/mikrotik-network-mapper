@@ -1,0 +1,1 @@
+FILE_FORMATS = ["txt", "pdf", "json", "png"]
