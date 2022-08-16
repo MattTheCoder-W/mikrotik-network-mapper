@@ -1,9 +1,6 @@
-from classes.mikrotik import Mikrotik
 from classes.arguments import get_args
 from classes.iplist import IPList, Address, Port
 
-import os
-from argparse import ArgumentParser
 import concurrent.futures
 import routeros_api
 import csv
@@ -22,14 +19,12 @@ class Mapper:
         self.net_addr = info['network']
         self.passwords = args['password_list']
         self.passwords.append("")
-        print(self.passwords)
         self.active = []
         self.macs = []
         self.nodes = []
     
     def check_host(self, host) -> None:
-        host_port = Port(host, 8291)
-        if bool(host_port):
+        if bool(Port(host, 8291)):
             self.active.append({"host": host, "uname": None, "passwd": None, "conn": None})
 
     def find_active(self) -> None:
@@ -43,9 +38,8 @@ class Mapper:
             correct_passwd = None
             for passwd in self.passwords:
                 try:
-                    conn = routeros_api.RouterOsApiPool(str(host), username=uname, password=passwd, plaintext_login=True)
-                    api = conn.get_api()
-                except routeros_api.exceptions.RouterOsApiCommunicationError as e:
+                    api = routeros_api.RouterOsApiPool(str(host), username=uname, password=passwd, plaintext_login=True).get_api()
+                except routeros_api.exceptions.RouterOsApiCommunicationError:
                     continue
                 correct_passwd = passwd
                 break
@@ -55,10 +49,9 @@ class Mapper:
                 self.active[i]['uname'] = uname
                 self.active[i]['passwd'] = passwd
                 self.active[i]['conn'] = api
-        header = ["Address", "User Name", "Password"]
         with open("passwords.csv", "w") as f:
             writer = csv.writer(f)
-            writer.writerow(header)
+            writer.writerow(["Address", "User Name", "Password"])
             for host_row in self.active:
                 if host_row['passwd'] is not None:
                     writer.writerow([host_row['host'], host_row['uname'], host_row['passwd']])
@@ -68,32 +61,26 @@ class Mapper:
             if host['conn'] is None:
                 continue
             api = host['conn']
-            node_info = {}
-
-            node_info['name'] = api.get_resource("/system/identity").get()[0]['name']
-
-            node_info["interfaces"] = {}
-            addr_list = api.get_resource("/ip/addr").get()
-            mac_list = api.get_resource("/interface").get()
-
-            for addr_info in addr_list:
+            node_info = {
+                'name': api.get_resource("/system/identity").get()[0]['name'],
+                'interfaces': {}
+            }
+            for addr_info in api.get_resource("/ip/addr").get():
                 interface_info = {"neighbors": []}
                 name = addr_info['interface']
                 interface_info['address'] = addr_info['address']
-                for inter in mac_list:
+                for inter in api.get_resource("/interface").get():
                     if inter['name'] == name:
                         interface_info['mac'] = inter['mac-address']
                         if interface_info['mac'] not in self.macs:
                             self.macs.append(interface_info['mac'])
                         break
                 node_info['interfaces'][name] = interface_info
-
             neighbor_list = api.get_resource("/ip/neighbor").get()
             for neighbor in neighbor_list:
                 neighbor_info = {}
                 if "address" in neighbor:
                     neighbor_info["address"] = neighbor['address']
-
                 try:
                     interface = neighbor['interface']
                     neighbor_info["mac"] = neighbor['mac-address']
@@ -148,7 +135,6 @@ class Mapper:
             point_info['mac'] = mac
             point_info['pos'] = [x, y]
             points.append(point_info)
-
         img = Image.new("RGB", (W+OFFSET, H+OFFSET), color=(255, 255, 255))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("SansSerif.ttf", size=20)
@@ -159,7 +145,6 @@ class Mapper:
             br = [pos[0]+25, pos[1]+25]
             draw.ellipse([tl[0], tl[1], br[0], br[1]], "red")
             draw.text((pos[0]-80, pos[1]+30), point['mac'], (0, 0, 0), font=font)
-        
         for node in self.nodes:
             for interface in node['interfaces']:
                 interface = node['interfaces'][interface]
@@ -173,7 +158,6 @@ class Mapper:
                     if "address" in neighbor:
                         draw.text((next_pos[0]-60+(OFFSET), next_pos[1]+90), neighbor['address'], (0, 0, 0), font=font)
                     draw.line([pos[0]+(OFFSET), pos[1], next_pos[0]+(OFFSET), next_pos[1]], (random.randint(0, 200), random.randint(0, 200), random.randint(0, 200)), width=5)
-        
         img.save(f"output.{out_format}")
 
 
