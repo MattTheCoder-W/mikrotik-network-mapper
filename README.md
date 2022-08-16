@@ -41,43 +41,43 @@ Argument name | Argument type | Description | Example
 
 # To Do
 
-[ ] Create base script
+- [ ] Create base script
 
-    [ ] Arguments parsing
+    - [ ] Arguments parsing
 
-    [ ] Arguments checking
+    - [ ] Arguments checking
 
-    [ ] Main program class
+    - [ ] Main program class
 
-[ ] Find alive devices
+- [ ] Find alive devices
 
-[ ] Check if device uses mikrotik routerOs
+- [ ] Check if device uses mikrotik routerOs
 
-[ ] Find password for device using password list
+- [ ] Find password for device using password list
 
-[ ] Save found passwords to CSV file
+- [ ] Save found passwords to CSV file
 
-[ ] Connect to mikrotik device
+- [ ] Connect to mikrotik device
 
-[ ] Find mikrotik neighbors
+- [ ] Find mikrotik neighbors
 
-[ ] Create connections based on device neighbors
+- [ ] Create connections based on device neighbors
 
-[ ] Create network map based on found connections
+- [ ] Create network map based on found connections
 
-[ ] Generate network map
+- [ ] Generate network map
 
-[ ] Save network map in different formats
+- [ ] Save network map in different formats
 
-    [ ] PDF
+    - [ ] PDF
 
-    [ ] Text
+    - [ ] Text
 
-    [ ] Json
+    - [ ] Json
 
-    [ ] Terminal output
+    - [ ] Terminal output
 
-[ ] Optimize code
+- [ ] Optimize code
 
 # Author
 
