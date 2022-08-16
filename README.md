@@ -59,13 +59,15 @@ Argument name | Argument type | Description | Example
 
 - [x] Find mikrotik neighbors
 
-- [ ] Create connections based on device neighbors
+- [x] Create connections based on device neighbors
 
-- [ ] Create network map based on found connections
+- [x] Create network map based on found connections
 
-- [ ] Generate network map
+- [x] Generate network map
 
 - [ ] Save network map in different formats
+
+    - [x] PNG
 
     - [ ] PDF
 
