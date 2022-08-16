@@ -51,11 +51,11 @@ Argument name | Argument type | Description | Example
 
 - [x] Find alive mikrotik devices
 
-- [ ] Find password for device using password list
+- [x] Find password for device using password list
 
-- [ ] Save found passwords to CSV file
+- [x] Save found passwords to CSV file
 
-- [ ] Connect to mikrotik device
+- [x] Connect to mikrotik device
 
 - [ ] Find mikrotik neighbors
 
