@@ -41,17 +41,15 @@ Argument name | Argument type | Description | Example
 
 # To Do
 
-- [ ] Create base script
+- [x] Create base script
 
-    - [ ] Arguments parsing
+    - [x] Arguments parsing
 
-    - [ ] Arguments checking
+    - [x] Arguments checking
 
-    - [ ] Main program class
+    - [x] Main program class
 
-- [ ] Find alive devices
-
-- [ ] Check if device uses mikrotik routerOs
+- [x] Find alive mikrotik devices
 
 - [ ] Find password for device using password list
 
