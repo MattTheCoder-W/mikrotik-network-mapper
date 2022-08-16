@@ -57,7 +57,7 @@ Argument name | Argument type | Description | Example
 
 - [x] Connect to mikrotik device
 
-- [ ] Find mikrotik neighbors
+- [x] Find mikrotik neighbors
 
 - [ ] Create connections based on device neighbors
 
