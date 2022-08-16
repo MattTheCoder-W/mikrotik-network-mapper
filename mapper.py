@@ -89,7 +89,6 @@ class Mapper:
 
             neighbor_list = api.get_resource("/ip/neighbor").get()
             for neighbor in neighbor_list:
-                print(neighbor)
                 neighbor_info = {}
                 if "address" in neighbor:
                     neighbor_info["address"] = neighbor['address']
@@ -123,8 +122,6 @@ class Mapper:
             point_info['mac'] = mac
             point_info['pos'] = [x, y]
             points.append(point_info)
-        print(points)
-        print(rows, len(points))
 
         img = Image.new("RGB", (W+OFFSET, H+OFFSET), color=(255, 255, 255))
         draw = ImageDraw.Draw(img)
@@ -144,7 +141,6 @@ class Mapper:
                 pos = [p['pos'] for p in points if p['mac'] == mac][0]
                 draw.text((pos[0]-60+(OFFSET), pos[1]+60), node['name'], (0, 0, 0), font=font)
                 draw.text((pos[0]-60+(OFFSET), pos[1]+90), interface['address'], (0, 0, 0), font=font)
-                print(pos, mac)
                 for neighbor in interface['neighbors']:
                     next_pos = [p['pos'] for p in points if p['mac'] == neighbor['mac']][0]
                     draw.text((next_pos[0]-60+(OFFSET), next_pos[1]+60), neighbor['hostname'], (0, 0, 0), font=font)
@@ -157,14 +153,9 @@ class Mapper:
 
 if __name__ == "__main__":
     args = get_args()
-    print(args)
     mapper = Mapper(args)
     mapper.find_active()
     print(f"Found {len(mapper.active)} active mikrotik hosts!")
     mapper.find_credentials()
-    # print(mapper.active)
     mapper.find_neighbors()
-
-    print(mapper.nodes)
-
     mapper.make_map()
