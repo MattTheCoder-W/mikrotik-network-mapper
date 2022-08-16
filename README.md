@@ -69,17 +69,17 @@ Argument name | Argument type | Description | Example
 
 - [x] Generate network map
 
-- [ ] Save network map in different formats
+- [x] Save network map in different formats
 
     - [x] PNG
 
     - [x] PDF
 
-    - [ ] Text
+    - [x] Text
 
     - [x] Json
 
-    - [ ] Terminal output
+    - [x] Terminal output
 
 - [ ] Optimize code
 

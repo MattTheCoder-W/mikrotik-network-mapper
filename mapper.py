@@ -111,6 +111,26 @@ class Mapper:
             with open("output.json", "w") as out:
                 out.write(json_obj)
             return
+        if out_format == "txt" or out_format == "stdout":
+            out = []
+            for node in self.nodes:
+                out.append(f"{node['name']}:")
+                for interface in node['interfaces']:
+                    interface_info = node['interfaces'][interface]
+                    out.append(f"\tInterface: {interface} -> {interface_info['address']} ({interface_info['mac']})")
+                    for neighbor in interface_info['neighbors']:
+                        if "address" in neighbor:
+                            out.append(f"\t\tAddress: {neighbor['address']}")
+                        out.append(f"\t\tMAC: {neighbor['mac']}")
+                        out.append(f"\t\tHostname: {neighbor['hostname']}")
+                        out.append("\t\t" + "="*20)
+            if out_format == "txt":
+                with open("output.txt", "w") as f:
+                    f.writelines([line+"\n" for line in out])
+            else:
+                for line in out:
+                    print(line)
+            return
         W, H = [1080, 1080]
         OFFSET = 300
         max_in_row = 3
@@ -164,4 +184,4 @@ if __name__ == "__main__":
     print(f"Found {len(mapper.active)} active mikrotik hosts!")
     mapper.find_credentials()
     mapper.find_neighbors()
-    mapper.make_map(out_format="json")
+    mapper.make_map(out_format="stdout")
