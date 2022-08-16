@@ -25,6 +25,10 @@ Required Python packages:
 
 * routeros-api
 
+* pillow
+
+To install these requirements run: `pip install -r requirements.txt`
+
 # Usage
 
 To use this script run: `python mapper.py [options] net_addr net_mask password_list`
