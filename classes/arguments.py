@@ -42,6 +42,7 @@ def file_path(value: str) -> str:
             if confirm.lower() not in ["y", "n"]:
                 print("Incorrect answer!")
                 continue
+            break
     return value
 
 

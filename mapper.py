@@ -157,10 +157,10 @@ class Mapper:
                 draw.text((pos[0]-60+(OFFSET), pos[1]+90), interface['address'], (0, 0, 0), font=font)
                 for neighbor in interface['neighbors']:
                     next_pos = [p['pos'] for p in points if p['mac'] == neighbor['mac']][0]
+                    draw.line([pos[0]+(OFFSET), pos[1], next_pos[0]+(OFFSET), next_pos[1]], (random.randint(0, 200), random.randint(0, 200), random.randint(0, 200)), width=5)
                     draw.text((next_pos[0]-60+(OFFSET), next_pos[1]+60), neighbor['hostname'], (0, 0, 0), font=font)
                     if "address" in neighbor:
                         draw.text((next_pos[0]-60+(OFFSET), next_pos[1]+90), neighbor['address'], (0, 0, 0), font=font)
-                    draw.line([pos[0]+(OFFSET), pos[1], next_pos[0]+(OFFSET), next_pos[1]], (random.randint(0, 200), random.randint(0, 200), random.randint(0, 200)), width=5)
         img.save(out_file)
 
 
