@@ -77,7 +77,7 @@ Argument name | Argument type | Description | Example
 
     - [ ] Text
 
-    - [ ] Json
+    - [x] Json
 
     - [ ] Terminal output
 
