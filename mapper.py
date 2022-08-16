@@ -104,7 +104,7 @@ class Mapper:
                     self.macs.append(neighbor['mac-address'])
             self.nodes.append(node_info)
     
-    def make_map(self):
+    def make_map(self, out_format: str = "png"):
         W, H = [1080, 1080]
         OFFSET = 300
         max_in_row = 3
@@ -148,7 +148,7 @@ class Mapper:
                         draw.text((next_pos[0]-60+(OFFSET), next_pos[1]+90), neighbor['address'], (0, 0, 0), font=font)
                     draw.line([pos[0]+(OFFSET), pos[1], next_pos[0]+(OFFSET), next_pos[1]], (random.randint(0, 200), random.randint(0, 200), random.randint(0, 200)), width=5)
         
-        img.save("output.png")
+        img.save(f"output.{out_format}")
 
 
 if __name__ == "__main__":
@@ -158,4 +158,4 @@ if __name__ == "__main__":
     print(f"Found {len(mapper.active)} active mikrotik hosts!")
     mapper.find_credentials()
     mapper.find_neighbors()
-    mapper.make_map()
+    mapper.make_map(out_format="pdf")

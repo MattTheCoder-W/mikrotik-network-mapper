@@ -69,7 +69,7 @@ Argument name | Argument type | Description | Example
 
     - [x] PNG
 
-    - [ ] PDF
+    - [x] PDF
 
     - [ ] Text
 
