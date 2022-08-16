@@ -10,6 +10,7 @@ import csv
 import math
 from PIL import Image, ImageDraw, ImageFont
 import random
+import json
 
 
 class Mapper:
@@ -105,6 +106,11 @@ class Mapper:
             self.nodes.append(node_info)
     
     def make_map(self, out_format: str = "png"):
+        if out_format == "json":
+            json_obj = json.dumps(self.nodes, indent=4)
+            with open("output.json", "w") as out:
+                out.write(json_obj)
+            return
         W, H = [1080, 1080]
         OFFSET = 300
         max_in_row = 3
@@ -158,4 +164,4 @@ if __name__ == "__main__":
     print(f"Found {len(mapper.active)} active mikrotik hosts!")
     mapper.find_credentials()
     mapper.find_neighbors()
-    mapper.make_map(out_format="pdf")
+    mapper.make_map(out_format="json")
