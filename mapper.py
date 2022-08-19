@@ -121,26 +121,29 @@ class Mapper:
                 for line in out:
                     print(line)
             return
+
+        # GRAPHICAL
         W, H = [1080, 1080]
         OFFSET = 300
-        max_in_row = 3
-        row_step = int(W//max_in_row)
+        CENTER = [int(W//3), int(H//1.5)]
+        RADIUS = int(W//2)
         amount = len(self.macs)
-        rows = int(math.ceil(amount / max_in_row))
-        vertical_step = int(H // rows)
+        deg_step = int(360 // amount)
+
         points = []
+        cur_deg = deg_step
         for i, mac in enumerate(self.macs):
             point_info = {}
-            row = int(math.ceil((i+1) / max_in_row))
-            y = row * vertical_step
-            column = int((i+1) % 3)
-            x = column * row_step
+            y = int(round(math.cos(math.radians(cur_deg)) * RADIUS, 0))+CENTER[1]
+            x = int(round(math.sin(math.radians(cur_deg)) * RADIUS, 0))+CENTER[0]
             point_info['mac'] = mac
             point_info['pos'] = [x, y]
             points.append(point_info)
+            cur_deg += deg_step
         img = Image.new("RGB", (W+OFFSET, H+OFFSET), color=(255, 255, 255))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("SansSerif.ttf", size=20)
+        
         for point in points:
             pos = point['pos']
             pos = [pos[0]+(OFFSET), pos[1]]
@@ -148,14 +151,21 @@ class Mapper:
             br = [pos[0]+25, pos[1]+25]
             draw.ellipse([tl[0], tl[1], br[0], br[1]], "red")
             draw.text((pos[0]-80, pos[1]+30), point['mac'], (0, 0, 0), font=font)
+        node_macs = []
+        for node in self.nodes:
+            for interface in node['interfaces']:
+                interface = node['interfaces'][interface]
+                node_macs.append(interface['mac'])
         for node in self.nodes:
             for interface in node['interfaces']:
                 interface = node['interfaces'][interface]
                 mac = interface['mac']
                 pos = [p['pos'] for p in points if p['mac'] == mac][0]
-                draw.text((pos[0]-60+(OFFSET), pos[1]+60), node['name'], (0, 0, 0), font=font)
-                draw.text((pos[0]-60+(OFFSET), pos[1]+90), interface['address'], (0, 0, 0), font=font)
+                # draw.text((pos[0]-60+(OFFSET), pos[1]+60), node['name'], (0, 0, 0), font=font)
+                # draw.text((pos[0]-60+(OFFSET), pos[1]+90), interface['address'], (0, 0, 0), font=font)
                 for neighbor in interface['neighbors']:
+                    if neighbor['mac'] in node_macs:
+                        continue
                     next_pos = [p['pos'] for p in points if p['mac'] == neighbor['mac']][0]
                     draw.line([pos[0]+(OFFSET), pos[1], next_pos[0]+(OFFSET), next_pos[1]], (random.randint(0, 200), random.randint(0, 200), random.randint(0, 200)), width=5)
                     draw.text((next_pos[0]-60+(OFFSET), next_pos[1]+60), neighbor['hostname'], (0, 0, 0), font=font)
